@@ -2,4 +2,4 @@
 --require sinon
 --reporter spec
 --ui bdd
---timeout 500000
+--timeout 5000

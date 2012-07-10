@@ -1,7 +1,20 @@
-div.row-fluid
-  div#info.span12.well 
-    p Author printable PDFs from the comfort of a webpage
 
 div.row-fluid  
-  div.span12
+  div.span3.well
+    form#pdf.row-fluid(action="/render.pdf", method="post")
+      //- label Title
+      input(name="greeting", type="text", class="span12", placeholder="Hey Center City")
+      textarea(name="question", class="span12", rows="4", placeholder="How do you use public recreation sites?")
+      input(name="phoneNumber", class="span12", placeholder="215-766-9451")
+
+      span(class="help-block") Some helpful explanation here.
+      div.row-fluid
+        button(id="get-pdf", type="submit", class="btn span4 btn-success")
+          i.icon-chevron-down.icon-white  
+          strong &nbsp; PDF
+        button(id="get-preview", type="submit", class="btn span8 btn-primary") 
+          i.icon-refresh.icon-white  
+          strong &nbsp; Preview
+
+  img#preview.span9.well(src="/render.png")
 
