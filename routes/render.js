@@ -7,8 +7,6 @@ var defaults = {
 , phoneNumber: '215-766-9451'
 };
 
-var size = [612, 792];
-
 module.exports = function(req, res) {
   var doc = new PDFDocument({
     size: "LETTER"
@@ -21,55 +19,26 @@ module.exports = function(req, res) {
     content[key] = content[key] || defaults[key];
   }
 
-  // // Greeting
-  // doc.text(content.greeting, 100, 100, {
-  //   width: 410,
-  //   align: 'left'
-  // });
+  // Greeting
+  doc.fontSize(40);
+  doc.fillAndStroke("#888", "#888")
+  doc.text(content.greeting, {
+    align: 'left'
+  });
 
+  // Question
+  doc.fontSize(60);
+  doc.fillAndStroke("#444", "#444")
+  doc.text(content.question, {
+    align: 'left'
+  });
 
-  // doc.text('Hello world!');
-  doc.fillAndStroke("red", "#900")
-  doc.text("Hello world!", 100, 100);
-
-
-  doc.font('Times-Roman')
-     .text('Hello from Times Roman!', 100, 100)
-     .moveDown(0.5);
-
-
-  // // Question
-  // ctx.textBaseline = "middle";
-  // ctx.fillStyle = "blue";
-  // ctx.font = '80px san-serif';
-  // var nextY = wrapText(ctx, content.question, 17, 100, 600, 85);
-
-  // // PhoneNumber
-  // ctx.textBaseline = "middle";
-  // ctx.fillStyle = "red";
-  // ctx.font = '30px san-serif';
-  // ctx.fillText("Send an SMS to " + content.phoneNumber, 17, nextY + 20);
-
-  // if (req.params.format == 'png') {
-  //   if (req.route.method == "get") {
-  //     res.writeHead(200, {'Content-Type': 'image/png'});
-  //     var stream = canvas.createPNGStream();
-  //     stream.on('data', function(chunk){
-  //       res.write(chunk);
-  //     });
-  //     stream.on('end', function() {
-  //       res.end();
-  //     });
-  //     stream.on('close', function() {
-  //       console.log("Rendered PNG");
-  //     });
-  //   }
-  //   else if (req.route.method == "post") {
-  //     var output = canvas.toBuffer();
-  //     res.end(output.toString('base64'));
-  //   }
-  // }
-  // else 
+  // Phone number
+  doc.fontSize(20);
+  doc.fillAndStroke("#888", "#888")
+  doc.text('Send an SMS to ' + content.phoneNumber, {
+    align: 'left'
+  });
 
   doc.output(function(pdf) {
     if(req.params.format == 'pdf') {
@@ -88,7 +57,7 @@ module.exports = function(req, res) {
         customArgs: [
             ,"-gravity", "center"
             ,"-extent", 612 + "x" + 792
-            ,"-density", '150x150'
+            // ,"-density", '150x150'
             ]
       }
       , function(err, stdout, stderr) {
