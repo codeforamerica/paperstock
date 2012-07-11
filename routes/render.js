@@ -8,16 +8,18 @@ var defaults = {
 };
 
 module.exports = function(req, res) {
+  // Merge our submitted content and defaults
+  var content = req.body;
+  for (var key in defaults) {
+    content[key] = content[key] || defaults[key];
+  }
+
+  /** Begin Layout **********************************/
   var doc = new PDFDocument({
     size: "LETTER"
   , layout: 'portrait'  
   });
   doc.compress = false; // https://github.com/devongovett/pdfkit/issues/77
-
-  var content = req.body;
-  for (var key in defaults) {
-    content[key] = content[key] || defaults[key];
-  }
 
   // Greeting
   doc.fontSize(40);
@@ -40,6 +42,9 @@ module.exports = function(req, res) {
     align: 'left'
   });
 
+  /** End Layout ************************************/
+
+  // Render and output
   doc.output(function(pdf) {
     if(req.params.format == 'pdf') {
       res.writeHead(200, {'Content-Type': 'application/pdf'});    
@@ -61,14 +66,15 @@ module.exports = function(req, res) {
             ]
       }
       , function(err, stdout, stderr) {
-          console.log(err);
+          if (err) { console.log(err) };
           var png = new Buffer(stdout, 'binary');
           if (req.route.method == 'get'){
             res.writeHead(200, {'Content-Type': 'image/png'});
             res.end(png);
-
           }
           else if(req.route.method == 'post') {
+            // return as base64 encoded string to be inserted into 
+            // img element: 'data:image/png;base64,' + png
             res.end(png.toString('base64'));
           }
         }
@@ -76,25 +82,3 @@ module.exports = function(req, res) {
     }
   });
 };
-
-
-function wrapText(context, text, x, y, maxWidth, lineHeight) {
-  var words = text.split(" ");
-  var line = "";
-
-  for(var n = 0; n < words.length; n++) {
-    var testLine = line + words[n] + " ";
-    var metrics = context.measureText(testLine);
-    var testWidth = metrics.width;
-    if(testWidth > maxWidth) {
-      context.fillText(line, x, y);
-      line = words[n] + " ";
-      y += lineHeight;
-    }
-    else {
-      line = testLine;
-    }
-  }
-  context.fillText(line, x, y);
-  return y + lineHeight/2;
-}
