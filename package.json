@@ -1,19 +1,17 @@
 {
     "name": "paperstock"
-  , "version": "0.0.2"
+  , "version": "0.0.1"
   , "private": true
   , "engines": {
-      "node": "0.6.x"
+      "node": "0.8.x",
+      "npm":  "1.1.x"
   }
   , "dependencies": {
       "express": "2.5.x"
     , "jade": ">= 0.0.x"
     , "canvas": "0.13.x"
     , "mocha": ">=1.0.3"
-    , "should": ">=0.6.3"
-    , "sinon": ">=1.3.4"
-  }
-  , "devDependencies": {
-      "canvas": "0.12.x"
+    , "should": ">=0.6.x"
+    , "sinon": ">=1.3.x"
   }
 }
